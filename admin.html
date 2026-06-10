@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Admin JSA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><div class="logo">JSA</div><div><b>Halaman Pengelola</b><span>Jaya Sakti Abadi</span></div></div>
+  <nav><a href="index.html">Lihat Web Member</a></nav>
+</header>
+
+<section class="admin-wrap">
+  <div id="loginBox" class="panel">
+    <h1>Masuk Pengelola</h1>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button class="btn full" onclick="login()">Login</button>
+  </div>
+
+  <div id="dashboard" class="hidden">
+    <div class="section-head">
+      <h1>Admin JSA</h1>
+      <div>
+        <button class="btn danger" onclick="resetAllData()">Hapus Semua Data</button>
+        <button class="btn danger" onclick="logout()">Keluar</button>
+      </div>
+    </div>
+
+    <div class="stats" id="adminStats"></div>
+
+    <div class="admin-tabs">
+      <button class="tab-btn active" onclick="showAdminPage('kategori')">Kelompok Barang</button>
+      <button class="tab-btn" onclick="showAdminPage('tambah')">Tambah Barang</button>
+      <button class="tab-btn" onclick="showAdminPage('barang')">Data Barang</button>
+      <button class="tab-btn" onclick="showAdminPage('stok')">Stok Barang <span id="stockBadge" class="tab-badge hidden">0</span></button>
+      <button class="tab-btn" onclick="showAdminPage('member')">Riwayat Belanja</button>
+      <button class="tab-btn" onclick="showAdminPage('akun')">Data Member</button>
+      <button class="tab-btn" onclick="showAdminPage('backup')">Backup Data</button>
+    </div>
+
+    <div id="page-kategori" class="admin-page active">
+    <div class="panel">
+      <h2>Kelompok Barang</h2>
+      <div class="form-grid">
+        <input id="catName" placeholder="Nama kategori, contoh: Snack">
+        <input id="subNames" placeholder="Sub menu, pisahkan koma. Contoh: Snack Karton, Biskuit">
+        <button class="btn" onclick="saveCategory()">Simpan Kategori</button>
+      </div>
+      <div id="categoryList" class="category-list"></div>
+    </div>
+
+    </div>
+
+    <div id="page-tambah" class="admin-page">
+    <div class="panel">
+      <h2>Tambah Barang</h2>
+      <p class="hint">Admin bisa input harga normal, harga Member 1, dan harga Member 2 secara manual. Member 3 memakai harga normal.</p>
+      <div class="form-grid labelled">
+        <label>Nama produk<input id="pName" placeholder="Snack A Karton 24 pcs"></label>
+        <label>Kategori<select id="pCategory" onchange="refreshSubOptions()"></select></label>
+        <label>Jenis Barang<select id="pSub"></select></label>
+        <label>Satuan besar<input id="pBigUnit" placeholder="karton / dus / sak / kotak"></label>
+        <label>Satuan kecil<input id="pSmallUnit" placeholder="pcs / kg / liter / pack"></label>
+        <label>Isi per satuan besar<input id="pContentPerBig" type="number" step="0.01" placeholder="24 / 12 / 50"></label>
+        <label>Jumlah stok besar<input id="pStockBig" type="number" step="0.01" placeholder="Contoh: 5"></label>
+        <label>Tambahan stok kecil<input id="pStockSmall" type="number" step="0.01" placeholder="Contoh: 3"></label>
+        <label>Harga pokok per kecil<input id="pCost" type="number" placeholder="Modal per pcs/kg"></label>
+        <label>Harga Jual kecil<input id="pPriceSmall" type="number" placeholder="Contoh: 3500 per pcs/kg"></label>
+        <label>Harga Jual besar<input id="pPriceBig" type="number" placeholder="Contoh: 78000 per karton/sak"></label>
+        <label>Harga Member 1 kecil<input id="pPriceMember1Small" type="number" placeholder="Opsional"></label>
+        <label>Harga Member 1 besar<input id="pPriceMember1Big" type="number" placeholder="Opsional"></label>
+        <label>Harga Member 2 kecil<input id="pPriceMember2Small" type="number" placeholder="Opsional"></label>
+        <label>Harga Member 2 besar<input id="pPriceMember2Big" type="number" placeholder="Opsional"></label>
+        <label>Batas Stok Menipis<input id="pBatas" type="number" placeholder="Contoh: rokok 5, gula 10"></label>
+        <label>Link Gambar<input id="pImage" placeholder="Opsional"></label>
+        <button class="btn" onclick="saveProduct()">Tambah Produk</button>
+      </div>
+    </div>
+
+    </div>
+
+    <div id="page-barang" class="admin-page">
+    <div class="panel">
+      <div class="section-head">
+        <div>
+          <h2>Data Barang</h2>
+          <p class="hint">Agar tidak lag, daftar barang ditampilkan per halaman. Gunakan pencarian untuk menemukan barang.</p>
+        </div>
+        <button class="btn" onclick="showAdminPage('tambah')">+ Tambah Barang</button>
+      </div>
+      <input id="adminSearch" class="search-input" placeholder="Cari produk..." oninput="adminPage=1;renderAdmin()">
+      <div class="list-tools">
+        <button class="btn secondary" onclick="closeAllProductGroups()">Tutup Semua Grup</button>
+        <button class="btn secondary" onclick="openAllProductGroups()">Buka Semua Grup</button>
+        <button class="btn secondary" onclick="fillMissingProductImages()">Isi Gambar Otomatis</button>
+        <button class="btn secondary" onclick="adminPage=Math.max(1,adminPage-1);renderAdmin()">Sebelumnya</button>
+        <span id="adminPageInfo" class="hint"></span>
+        <button class="btn secondary" onclick="adminPage++;renderAdmin()">Berikutnya</button>
+      </div>
+      <div id="adminList"></div>
+    </div>
+
+
+    </div>
+
+    <div id="page-stok" class="admin-page">
+    <div class="panel">
+      <div class="section-head">
+        <div>
+          <h2>Daftar Stok Barang</h2>
+          <p class="hint">Tabel ini langsung diperbarui. Barang yang stoknya sama dengan atau di bawah threshold akan ditandai <b>MENIPIS</b>.</p>
+        </div>
+        <div class="report-actions">
+          <button class="btn" onclick="exportStockExcel()">Simpan Excel</button>
+          <button class="btn" onclick="exportStockPdf()">Simpan PDF</button>
+        </div>
+      </div>
+
+      <div class="form-grid labelled">
+        <label>Keterangan
+          <input value="Batas sekarang diatur per produk dari daftar produk admin" readonly>
+        </label>
+        <label>Contoh
+          <input value="Rokok 5 slop, gula 10 kg, minyak 3 liter, snack 12 pcs" readonly>
+        </label>
+      </div>
+
+      <div class="stock-summary" id="stockSummary"></div>
+
+      <div class="stock-tabs">
+        <button class="chip active" id="stockTabAlert" onclick="stockView='alert';renderStockReport()">Stok Menipis/Habis</button>
+        <button class="chip" id="stockTabCategory" onclick="stockView='category';renderStockReport()">Per Kelompok</button>
+        <button class="chip" id="stockTabMerek" onclick="stockView='brand';renderStockReport()">Per Merek</button>
+        <button class="chip" id="stockTabAll" onclick="stockView='all';renderStockReport()">Semua Barang</button>
+      </div>
+
+      <input id="stockSearch" class="search-input" placeholder="Cari stok barang..." oninput="renderStockReport()">
+      <div id="stockReport"></div>
+    </div>
+
+    </div>
+
+    <div id="page-member" class="admin-page">
+    <div class="panel">
+      <div class="section-head"><h2>Tabel Riwayat Belanja</h2><button class="btn danger" onclick="clearOrders()">Hapus Semua Transaksi</button></div>
+      <p class="hint">Poin member dihitung otomatis: setiap belanja Rp100.000 mendapat 1 poin.</p><div id="orderTable"></div>
+    </div>
+  </div>
+
+    <div id="page-akun" class="admin-page">
+      <div class="panel">
+        <div class="section-head">
+          <div>
+            <h2>Data Member</h2>
+            <p class="hint">Daftar akun yang pernah masuk dan ringkasan belanjanya.</p>
+          </div>
+          <button class="btn danger" onclick="clearMembers()">Hapus Data Member</button>
+        </div>
+        <div id="memberTable"></div>
+      </div>
+    </div>
+
+    <div id="page-backup" class="admin-page">
+      <div class="panel">
+        <div class="section-head">
+          <div>
+            <h2>Backup Data</h2>
+            <p class="hint">Simpan data sebelum reset, pindah laptop, atau update program.</p>
+          </div>
+          <button class="btn" onclick="exportData()">Export JSON</button>
+        </div>
+        <label class="file-import">
+          Import JSON
+          <input id="importFile" type="file" accept="application/json" onchange="importData(event)">
+        </label>
+      </div>
+    </div>
+
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="config.js?v=member-order-id"></script>
+<script src="data-stok-barang.js?v=stok-1527"></script>
+<script src="app.js?v=member-order-id"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JSA Jaya Sakti Abadi</title>
+  <link rel="stylesheet" href="style.css?v=filter-4-menu" />
+</head>
+<body class="member-locked">
+<header class="topbar">
+  <div class="brand"><div class="logo">JSA</div><div><b>Jaya Sakti Abadi</b><span>Grosir sejak 1980</span></div></div>
+  <nav><a href="#produk">Produk</a><a href="#member">Member</a><a href="admin.html">Admin</a></nav>
+</header>
+
+<section id="memberGate" class="login-gate">
+  <div class="panel gate-panel">
+    <div class="brand gate-brand"><div class="logo">JSA</div><div><b>Jaya Sakti Abadi</b><span></span></div></div>
+    <h1>Masuk</h1>
+    <input id="gateMemberUsername" placeholder="Username member">
+    <input id="gateMemberPassword" type="password" placeholder="Password">
+    <button class="btn full" onclick="memberLoginFromGate()">Masuk</button>
+  </div>
+</section>
+
+
+<div id="memberApp" class="member-app hidden">
+<section class="hero">
+  <div>
+    <p class="badge">Stok fleksibel per produk</p>
+    <h1>Grosir Lengkap &bull; Harga Bersaing &bull; Melayani Ecer & Partai Besar</h1>
+    <p>Temukan kebutuhan toko, rumah tangga, sembako, dan lainnya dengan harga terbaik.</p>
+    <div class="actions"><a class="btn" href="#produk">Mulai Belanja</a><a class="btn secondary" href="admin.html">Masuk Admin</a></div>
+  </div>
+  <div class="hero-card"><h3>Total Keranjang</h3><div id="cartPreview">Rp 0</div><small>Harga kecil dan harga besar dipisahkan. Setiap belanja Rp100.000 mendapat 1 poin.</small></div>
+</section>
+
+<main>
+  <section id="produk" class="section">
+    <div class="member-box panel hidden" id="memberLoginBox">
+      <h2>Masuk Member</h2>
+      <div class="form-grid">
+        <input id="memberUsername" placeholder="Username member">
+        <input id="memberPassword" type="password" placeholder="Password">
+        <button class="btn" onclick="memberLogin()">Masuk Member</button>
+      </div>
+    </div>
+
+    <div class="member-box panel hidden" id="memberInfoBox">
+      <div class="section-head">
+        <div><h2 id="memberGreeting">Halo Member</h2><p class="hint">Harga pokok tidak ditampilkan. Harga mengikuti level akun member Anda.</p></div>
+        <button class="btn danger" onclick="memberKeluar()">Keluar Member</button>
+      </div>
+    </div>
+
+    <div class="section-head"><h2>Daftar Barang</h2><input id="search" placeholder="Cari rokok: djarum, super 12, 76, LA, MLD, surya..." /></div>
+    <div class="filters" id="filters"></div>
+    <div class="brand-box" id="brandFilters"></div>
+    <div class="grid" id="productGrid"></div>
+    <div class="list-tools member-pager" id="productPager"></div>
+  </section>
+
+  <aside class="cart">
+    <button class="cart-toggle" onclick="toggleCartList()">
+      <span id="cartToggleTitle">Belanja (0 item)</span>
+      <b id="cartToggleIcon">&#9654; Lihat Daftar Belanja</b>
+    </button>
+    <label>Nama pembeli</label>
+    <input id="buyerName" placeholder="Nama wajib diisi sebelum checkout" oninput="saveCheckoutProfile()">
+    <label>Nomor telepon / WhatsApp</label>
+    <input id="buyerPhone" placeholder="Contoh: 081234567890" oninput="saveCheckoutProfile()">
+    <div id="cartListWrap" class="cart-list-wrap hidden">
+      <div id="cartItems"></div>
+    </div>
+    <div class="summary"><span>Total</span><b id="total">Rp 0</b></div>
+    <div class="summary"><span>Poin<br><small>Rp100.000 = 1 poin</small></span><b id="points">0</b></div>
+    <button class="btn full" onclick="checkout()">Selesaikan Belanja</button>
+    <button class="btn danger full" onclick="clearCart()">Kosongkan</button>
+  </aside>
+
+  <section id="member" class="section wide">
+    <h2>Data Rokok</h2>
+    <div class="features">
+      <div>&#10003; Harga Bal = Pokok + Rp5.000</div>
+      <div>&#10003; Harga Slop/Stang = Pokok + Rp1.000</div>
+      <div>&#10003; Stok bisa restok per bal atau slop</div>
+      <div>&#10003; Modal tetap hanya terlihat admin</div>
+    </div>
+  </section>
+</main>
+
+<footer>&copy; 1980 - 2026 JSA Jaya Sakti Abadi</footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="config.js?v=member-order-id"></script>
+<script src="data-stok-barang.js?v=stok-1527"></script>
+<script src="app.js?v=filter-4-menu"></script>
+</body>
+</html>

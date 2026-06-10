@@ -1,0 +1,14 @@
+{
+  "name": "jsa-bahasa-sederhana-online",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "build": "echo \"Build complete\"",
+    "start": "node index.js",
+    "serve": "node index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
